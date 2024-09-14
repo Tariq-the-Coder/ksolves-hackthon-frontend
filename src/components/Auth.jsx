@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Container, Form, Button, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { AuthContext } from "../contexts/AuthContext";
 import { login, register } from "../services/api";
@@ -18,6 +19,7 @@ const Auth = () => {
   });
 
   const { login: loginUser } = useContext(AuthContext);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +34,15 @@ const Auth = () => {
         });
       } else {
         const { data } = await login(username, password);
-        loginUser(data);
+        loginUser(data.user); // Pass user to AuthContext
+        localStorage.setItem('token', data.token); // Store the token
+
+        // Redirect based on user role
+        if (data.user.role === "instructor") {
+          navigate("/instructor-dashboard"); // Redirect to Instructor Dashboard
+        } else {
+          navigate("/classes"); // Redirect to Classes
+        }
         setAlert({
           message: "Login successful",
           variant: "success",
@@ -104,7 +114,7 @@ const Auth = () => {
                   >
                     <option value="student">Student</option>
                     <option value="instructor">Instructor</option>
-                    <option value="admin">Admin</option>
+                    {/* <option value="admin">Admin</option> */}
                   </Form.Control>
                 </Form.Group>
               </Col>
