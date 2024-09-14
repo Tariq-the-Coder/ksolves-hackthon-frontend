@@ -1,0 +1,117 @@
+.LoginContainer{
+    margin-top: 55%;
+    padding: 5rem;
+    width: fit-content;
+  box-shadow: 2px 4px 10px #333;
+  border-radius: 8px;
+
+}
+
+.LoginContainer form{
+    margin-top: 0.5rem;
+    min-width: 300px;
+}
+
+.LoginContainer form div{
+    margin-top: 1.5rem;
+}
+
+.LoginContainer .btn-primary{
+    margin-top: 1.5rem;
+}
+
+.login-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login-box h2{
+    width: fit-content;
+}
+
+
+
+/*  */
+
+.contact-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.address-box h1{
+    margin-bottom: 2rem;
+}
+.address-box div{
+    margin-bottom: 1rem;
+}
+
+
+
+
+/*  */
+
+.course-box{
+    width: 18rem;
+    border: 1px solid black;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 10px 10px 5px #cfdbeb;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    color: #111;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.course-box:hover{
+    background-color: orangered;
+    color: white;
+}
+
+.features-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.features-container li{
+    font-size: 18px;
+    padding: 0.5rem;
+}
+
+.features-container li::marker {
+    color: #4caf50;
+    font-size: 1.8em;
+  }
+
+  .objective-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .objective-container img{
+    width: 50%;
+  }
+  .objective-container .img-box2{
+    /* width: fit-content; */
+  }
+  .objective-container p{
+    margin-top: 1rem;
+    width: 80%;
+ 
+}
+
+.carousel-box img{
+    margin-left: auto;
+}
+.aboutus-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.aboutus-box img{
+    width: 400px;
+    filter: drop-shadow(2px 4px 6px black);
+    border-radius: 10%;
+}
+.aboutus-box p{
+    width: 80%;
+}
+
