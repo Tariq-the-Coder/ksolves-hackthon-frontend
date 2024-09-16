@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 
-const API_URL = `http://localhost:5000/api`;
+const API_URL = `https://ksolves-hackathon-backend.onrender.com/api`;
 
 // Create a default unauthenticated Axios instance
 const api = axios.create({
