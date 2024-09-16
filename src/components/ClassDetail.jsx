@@ -1,33 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthApi } from '../services/api';
-import UnitList from './UnitList';
+import { Alert } from 'react-bootstrap';
 
 const ClassDetail = () => {
   const { id } = useParams();
-  const [classDetail, setClassDetail] = useState({});
-  const [units, setUnits] = useState([]);
-  const { getClassById, getUnits } = useAuthApi();
+  const [classDetail, setClassDetail] = useState(null);
+  const [error, setError] = useState(null);
+  const { getClassById } = useAuthApi();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchClassDetail = async () => {
       try {
-        const { data } = await getClassById(id);
-        setClassDetail(data);
-        const unitData = await getUnits(id);
-        setUnits(unitData.data);
+        const response = await getClassById(id);
+        setClassDetail(response.data);
       } catch (error) {
-        console.error('Error fetching class detail:', error);
+        if (error.response && error.response.status === 403) {
+          setError('You are not enrolled in this class');
+          navigate('/classes'); // Redirect to classes page
+        } else {
+          setError('Error fetching class details');
+        }
       }
     };
 
     fetchClassDetail();
-  }, [id]);
+  }, []);
+
+  if (error) {
+    return <Alert variant="danger">{error}</Alert>;
+  }
 
   return (
     <div>
-      <h1>{classDetail.name}</h1>
-      <UnitList units={units} />
+      {classDetail ? (
+        <div>
+          <h1>{classDetail.name}</h1>
+          {/* Add more class detail information here */}
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };

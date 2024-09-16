@@ -9,10 +9,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   const login = (userData, token) => {
-    console.log(userData);
     setUser(userData); // Store user data including role and token
     setToken(token)
-    // console.log(userData, token);
   };
   
   const logout = () => {

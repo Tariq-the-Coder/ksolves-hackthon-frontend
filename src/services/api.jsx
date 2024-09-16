@@ -14,7 +14,7 @@ const api = axios.create({
 
 // Helper function to create an authenticated Axios instance
 const getAuthApi = (token) => {
-  console.log('Token in Authorization header:', token);  // Log token for debugging
+  // console.log('Token in Authorization header:', token);  // Log token for debugging
   return axios.create({
     baseURL: API_URL,
     headers: {
@@ -43,6 +43,9 @@ export const useAuthApi = () => {
     return await authApi.get('/classes');
   };
 
+  const enrollInClass = async (classId) => {
+    return await authApi.post(`/classes/${classId}/enroll`);
+  };
   // Authenticated API function to get a specific class by ID
   const getClassById = async (id) => {
     return await authApi.get(`/classes/${id}`);
@@ -95,13 +98,29 @@ export const useAuthApi = () => {
     return await authApi.post('/comments', { content, sessionId, parentCommentId });
   };
 
-  // API function to join a class
-  const joinClass = async (classId) => {
+ // API function to join a class
+const joinClass = async (classId) => {
+  try {
     return await authApi.post(`/classes/${classId}/join`);
+  } catch (error) {
+    throw error;
+  }
+};
+
+   // API function to delete a class
+   const deleteClass = async (classId) => {
+    try {
+      const response = await authApi.delete(`/classes/${classId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting class:', error);
+      throw error;
+    }
   };
 
   return {
     getClasses,
+    enrollInClass,
     getClassById,
     createClass,
     addUnitToClass,
@@ -112,6 +131,7 @@ export const useAuthApi = () => {
     getComments,
     createComment,
     joinClass,
+    deleteClass
   };
 };
 
