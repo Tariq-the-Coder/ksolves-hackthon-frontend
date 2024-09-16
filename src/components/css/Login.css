@@ -1,9 +1,10 @@
 .LoginContainer{
-    margin-top: 55%;
+    /* margin-top: 5%; */
     padding: 5rem;
     width: fit-content;
   box-shadow: 2px 4px 10px #333;
   border-radius: 8px;
+  padding: 2rem !important;
 
 }
 
@@ -12,12 +13,23 @@
     min-width: 300px;
 }
 
+.register-btn{
+    margin-bottom: 1rem;
+}
+
 .LoginContainer form div{
     margin-top: 1.5rem;
 }
 
 .LoginContainer .btn-primary{
     margin-top: 1.5rem;
+    background-color: #0d6efd;
+    color: white;
+    padding: 1rem;
+}
+
+.LoginContainer button{
+    padding: 1rem;
 }
 
 .login-box{
@@ -98,6 +110,10 @@
  
 }
 
+.switchbtn{
+    background: #eeeeee;
+}
+
 .carousel-box img{
     margin-left: auto;
 }
@@ -115,3 +131,29 @@
     width: 80%;
 }
 
+@media (min-width: 1000px) {
+    /* Styles for devices with a width of 1000px or more */
+    .login-box {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  
+    .login-box h2 {
+      font-size: 2rem;
+    }
+  
+    .login-box .form-group {
+      margin-bottom: 20px;
+    }
+  
+    .login-box .btn {
+      width: auto;
+      padding: 15px;
+    }
+  
+    .login-box .text-center {
+      text-align: center;
+    }
+  }
+  

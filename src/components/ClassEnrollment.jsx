@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Form, Button, Row, Col, Alert, Spinner } from 'react-bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
-import { getClasses, joinClass } from '../services/api';
+import { useAuthApi } from '../services/api';
 
 const ClassEnrollment = () => {
   const [classes, setClasses] = useState([]);
@@ -9,6 +9,8 @@ const ClassEnrollment = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ message: '', variant: '', value: false });
   const { user } = useContext(AuthContext);
+  const { getClasses, joinClass } = useAuthApi();
+
 
   useEffect(() => {
     if (user.role === 'student') {

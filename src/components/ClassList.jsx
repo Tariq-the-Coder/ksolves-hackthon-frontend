@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getClasses } from '../services/api';
+import { useAuthApi } from '../services/api';
 import { Link } from 'react-router-dom';
 
 const ClassList = () => {
   const [classes, setClasses] = useState([]);
+  const { getClasses } = useAuthApi();
 
   useEffect(() => {
     const fetchClasses = async () => {

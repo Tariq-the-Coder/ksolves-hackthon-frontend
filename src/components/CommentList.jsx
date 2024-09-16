@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getComments, createComment } from '../services/api';
+import { useAuthApi } from '../services/api';
 
 const CommentList = ({ sessionId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const { getComments, createComment } = useAuthApi();
 
   useEffect(() => {
     const fetchComments = async () => {

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getClassById, getUnits } from '../services/api';
+import { useAuthApi } from '../services/api';
 import UnitList from './UnitList';
 
 const ClassDetail = () => {
   const { id } = useParams();
   const [classDetail, setClassDetail] = useState({});
   const [units, setUnits] = useState([]);
+  const { getClassById, getUnits } = useAuthApi();
 
   useEffect(() => {
     const fetchClassDetail = async () => {

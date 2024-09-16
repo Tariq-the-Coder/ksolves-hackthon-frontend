@@ -69,11 +69,11 @@ const Home = () => {
         </Row>
 
         {/* Footer Section */}
-        <Row className="footer-section text-center">
+        {/* <Row className="footer-section text-center">
           <Col>
             <p>&copy; {new Date().getFullYear()} Virtual Classroom. All rights reserved.</p>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </div>
   );

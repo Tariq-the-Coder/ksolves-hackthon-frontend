@@ -1,84 +1,80 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { Container, Form, Button, Alert, Spinner, Row, Col } from 'react-bootstrap';
 import { AuthContext } from '../contexts/AuthContext';
-import { getInstructorIdByUsername, createClass, getClasses } from '../services/api';
+// import { createClass } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuthApi } from '../services/api';
 
 const InstructorDashboard = () => {
-  const [className, setClassName] = useState('');
-  const [instructorId, setInstructorId] = useState(null);
-  const [classes, setClasses] = useState([]);
   const { user } = useContext(AuthContext);
+  const [className, setClassName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { createClass } = useAuthApi();
+  const [alert, setAlert] = useState({
+    message: '',
+    variant: '',
+    value: false,
+  });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth'); // Redirect to login if no user is logged in
-      return;
-    }
-
-    // Fetch instructor ID
-    const fetchInstructorId = async () => {
-      try {
-        const id = await getInstructorIdByUsername(user.username);
-        if (id) {
-          setInstructorId(id);
-        } else {
-          console.error('Instructor ID not found');
-        }
-      } catch (error) {
-        console.error('Error fetching instructor ID:', error);
-      }
-    };
-
-    fetchInstructorId();
-    loadClasses(); // Load classes on component mount
-  }, [user, navigate]);
-
-  const loadClasses = async () => {
+  const handleCreateClass = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      const response = await getClasses();
-      setClasses(response.data); // Adjust based on the response structure
+      const result = await createClass(className, user.instructorId);
+      setAlert({
+        message: 'Class created successfully',
+        variant: 'success',
+        value: true,
+      });
+      setClassName('');
+      navigate('/classes');
     } catch (error) {
-      console.error('Error fetching classes:', error);
+      setAlert({
+        message: error.response?.data || 'An error occurred',
+        variant: 'danger',
+        value: true,
+      });
     }
-  };
-
-  const handleCreateClass = async () => {
-    if (!instructorId) {
-      console.error('Instructor ID is missing');
-      return;
-    }
-
-    try {
-      await createClass(className, instructorId);
-      setClassName(''); // Clear the input
-      loadClasses(); // Reload classes after creation
-    } catch (error) {
-      console.error('Error creating class:', error);
-    }
+    setLoading(false);
   };
 
   return (
-    <div>
-      <h2>Instructor Dashboard</h2>
-      <div>
-        <input
-          type="text"
-          value={className}
-          onChange={(e) => setClassName(e.target.value)}
-          placeholder="Enter class name"
-        />
-        <button onClick={handleCreateClass}>Create Class</button>
-      </div>
-      <div>
-        <h3>Classes</h3>
-        <ul>
-          {classes.map((cls) => (
-            <li key={cls._id}>{cls.name}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <Container className="mt-4">
+      <h2 className="text-center mb-4">Create a New Class</h2>
+      {alert.value && (
+        <Alert
+          variant={alert.variant}
+          onClose={() => setAlert({ value: false })}
+          dismissible
+        >
+          <Alert.Heading>{alert.message}</Alert.Heading>
+        </Alert>
+      )}
+      <Form onSubmit={handleCreateClass}>
+        <Form.Group controlId="formClassName">
+          <Form.Label>Class Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter class name"
+            value={className}
+            onChange={(e) => setClassName(e.target.value)}
+            required
+          />
+        </Form.Group>
+        <Row className="mt-3">
+          <Col>
+            {loading ? (
+              <Spinner animation="border" variant="primary" />
+            ) : (
+              <Button type="submit" variant="primary">
+                Create Class
+              </Button>
+            )}
+          </Col>
+        </Row>
+      </Form>
+    </Container>
   );
 };
 

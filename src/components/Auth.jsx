@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, Link} from "react-router-dom";
 import { Container, Form, Button, Row, Col, Alert, Spinner } from "react-bootstrap";
 import { AuthContext } from "../contexts/AuthContext";
 import { login, register } from "../services/api";
-import { Link } from "react-router-dom";
-import "./css/Login.css";
+import { decodeToken } from '../utils/jwtDecode'; // Import the decodeToken function
+import "./css/Login.css"
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 const Auth = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -24,8 +26,10 @@ const Auth = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       if (isRegister) {
+        // Register flow
         await register(username, password, role);
         setAlert({
           message: "Registration successful",
@@ -33,16 +37,29 @@ const Auth = () => {
           value: true,
         });
       } else {
+        // Login flow
         const { data } = await login(username, password);
-        loginUser(data.user); // Pass user to AuthContext
-        localStorage.setItem('token', data.token); // Store the token
+
+        // Decode the token to extract the user data
+        const token = data.token;
+        const user = decodeToken(token); // Decode the JWT to extract user information
+
+        if (!user) {
+          throw new Error("Failed to decode token");
+        }
+
+        // Pass the user information to the AuthContext
+        loginUser(user, token);
+        // console.log(user);
+        localStorage.setItem('token', token); // Store the token
 
         // Redirect based on user role
-        if (data.user.role === "instructor") {
-          navigate("/instructor-dashboard"); // Redirect to Instructor Dashboard
-        } else {
-          navigate("/classes"); // Redirect to Classes
+        if (user.role === "instructor") {
+          navigate("/instructor-dashboard");
+        } else if (user.role === "student") {
+          navigate("/classes");
         }
+
         setAlert({
           message: "Login successful",
           variant: "success",
@@ -56,6 +73,7 @@ const Auth = () => {
         value: true,
       });
     }
+
     setLoading(false);
   };
 
@@ -71,9 +89,9 @@ const Auth = () => {
             <Alert.Heading>{alert.message}</Alert.Heading>
           </Alert>
         )}
-        <h2 className="text-center mb-4">{isRegister ? "Register" : "Login"}</h2>
+        <h2 className="text-center ">{isRegister ? "Register" : "Login"}</h2>
         <Form onSubmit={handleSubmit}>
-          <Row className="mb-3">
+          {/* <Row className="mb-2"> */}
             <Col>
               <Form.Group controlId="formUsername">
                 <Form.Label>Username</Form.Label>
@@ -87,8 +105,8 @@ const Auth = () => {
                 />
               </Form.Group>
             </Col>
-          </Row>
-          <Row className="mb-3">
+          {/* </Row> */}
+          {/* <Row className=""> */}
             <Col>
               <Form.Group controlId="formPassword">
                 <Form.Label>Password</Form.Label>
@@ -101,9 +119,8 @@ const Auth = () => {
                 />
               </Form.Group>
             </Col>
-          </Row>
+          {/* </Row> */}
           {isRegister && (
-            <Row className="mb-3">
               <Col>
                 <Form.Group controlId="formRole">
                   <Form.Label>Role</Form.Label>
@@ -118,9 +135,8 @@ const Auth = () => {
                   </Form.Control>
                 </Form.Group>
               </Col>
-            </Row>
           )}
-          <Row className="text-end mb-3">
+          {/* <Row className="text-end mb-3"> */}
             <Col>
               {!isRegister && (
                 <span>
@@ -128,9 +144,9 @@ const Auth = () => {
                 </span>
               )}
             </Col>
-          </Row>
-          <Row className="text-center">
-            <Col>
+          {/* </Row> */}
+          {/* <Row> */}
+            <Col className="mb-2 register-btn">
               {loading ? (
                 <Spinner animation="border" variant="primary" />
               ) : (
@@ -139,13 +155,14 @@ const Auth = () => {
                 </Button>
               )}
             </Col>
-          </Row>
-        </Form>
-        <div className="mt-3 text-center">
+        <div className="mt-3 text-center switchbtn">
           <Button variant="link" onClick={() => setIsRegister(!isRegister)}>
             Switch to {isRegister ? "Login" : "Register"}
           </Button>
         </div>
+
+          {/* </Row> */}
+        </Form>
       </Container>
     </div>
   );

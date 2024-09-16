@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getSessions } from '../services/api';
+import { useAuthApi } from '../services/api';
 import CommentList from './CommentList';
 
 const SessionList = () => {
   const { id } = useParams();
   const [sessions, setSessions] = useState([]);
+  const { getSessions } = useAuthApi();
+
 
   useEffect(() => {
     const fetchSessions = async () => {

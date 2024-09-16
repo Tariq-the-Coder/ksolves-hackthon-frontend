@@ -9,12 +9,14 @@ import Header from './components/Header';
 import InstructorDashboard from "./components/InstructorDashboard";
 import ClassEnrollment from "./components/ClassEnrollment";  // New component
 import Home from './components/Pages/Home';
+import { Col, Row } from 'react-bootstrap';
 
 const App = () => (
   <div className="grid-container">
     <AuthProvider>
       <Router>
         <Header />
+        <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
@@ -25,7 +27,11 @@ const App = () => (
           <Route path="/enroll-classes" element={<ClassEnrollment />} /> 
           {/* Add more routes as needed */}
         </Routes>
+        </main>
       </Router>
+      <footer>
+            <p>&copy; {new Date().getFullYear()} Virtual Classroom. All rights reserved.</p>
+      </footer>
     </AuthProvider>
   </div>
 );
