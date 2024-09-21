@@ -89,11 +89,16 @@ const ClassList = () => {
                     )
                   )}
 
-                  {/* Allow instructors to delete class */}
+                  {/* Allow instructors to view and delete class */}
                   {user && user.role === 'instructor' && (
-                    <Button variant="danger" onClick={() => handleDelete(cls._id)}>
-                      Delete
-                    </Button>
+                    <>
+                      <Link to={`/classes/${cls._id}`} className="btn btn-outline-primary">
+                        View Class
+                      </Link>
+                      <Button variant="danger" className="ml-2" onClick={() => handleDelete(cls._id)}>
+                        Delete
+                      </Button>
+                    </>
                   )}
                 </Card.Text>
               </Card.Body>
